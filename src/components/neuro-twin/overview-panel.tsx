@@ -69,10 +69,10 @@ export default function OverviewPanel() {
       {/* Brain + Quick Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <motion.div variants={item} className="lg:col-span-1">
-          <Card className="bg-card border-border h-[340px]">
+          <Card className="bg-card border-border h-[340px] glow-neuro overflow-hidden">
             <CardContent className="p-0 h-full relative">
               <div className="absolute top-3 left-3 z-10">
-                <Badge variant="outline" className="bg-background/80 text-neuro border-neuro/30 text-[10px]">
+                <Badge variant="outline" className="bg-background/80 text-neuro border-neuro/30 text-[10px] backdrop-blur-sm">
                   <Activity className="w-3 h-3 mr-1" /> 3D Brain Model
                 </Badge>
               </div>

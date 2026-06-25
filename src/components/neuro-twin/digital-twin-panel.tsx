@@ -71,15 +71,12 @@ export default function DigitalTwinPanel() {
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         {/* 3D Brain */}
         <motion.div variants={item} className="lg:col-span-2">
-          <Card className="bg-card border-border h-[400px]">
+          <Card className="bg-card border-border h-[400px] glow-neuro overflow-hidden">
             <CardContent className="p-0 h-full relative">
               <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
-                <Badge variant="outline" className="bg-background/80 text-neuro border-neuro/30 text-[10px]">
+                <Badge variant="outline" className="bg-background/80 text-neuro border-neuro/30 text-[10px] backdrop-blur-sm">
                   <Zap className="w-3 h-3 mr-1" /> Digital Twin Active
                 </Badge>
-              </div>
-              <div className="absolute bottom-3 left-3 z-10">
-                <p className="text-[10px] text-muted-foreground">Click & drag to rotate</p>
               </div>
               <Brain3D />
             </CardContent>

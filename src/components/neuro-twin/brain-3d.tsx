@@ -2,7 +2,7 @@
 
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { Float, Sphere, MeshDistortMaterial, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { useNeuroStore } from '@/lib/neuro-store';
 
@@ -18,19 +18,39 @@ function BrainCore() {
     }
   });
 
+  const baseColor = degradation > 0.5 ? '#f97316' : degradation > 0.3 ? '#eab308' : '#14b8a6';
+
   return (
     <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
-      <Sphere ref={meshRef} args={[1.5, 64, 64]}>
-        <MeshDistortMaterial
-          color={degradation > 0.5 ? '#f97316' : degradation > 0.3 ? '#eab308' : '#14b8a6'}
-          emissive={degradation > 0.5 ? '#f97316' : degradation > 0.3 ? '#eab308' : '#14b8a6'}
-          emissiveIntensity={0.3}
-          roughness={0.3}
-          metalness={0.1}
-          distort={0.25 + degradation * 0.3}
-          speed={2}
+      {/* Outer glow shell */}
+      <Sphere args={[1.6, 64, 64]}>
+        <meshBasicMaterial
+          color={baseColor}
           transparent
-          opacity={0.85}
+          opacity={0.04}
+          side={THREE.BackSide}
+        />
+      </Sphere>
+      {/* Main brain sphere */}
+      <Sphere ref={meshRef} args={[1.5, 128, 128]}>
+        <MeshDistortMaterial
+          color={baseColor}
+          emissive={baseColor}
+          emissiveIntensity={0.25}
+          roughness={0.4}
+          metalness={0.05}
+          distort={0.3 + degradation * 0.25}
+          speed={1.8}
+          transparent
+          opacity={0.8}
+        />
+      </Sphere>
+      {/* Inner core */}
+      <Sphere args={[0.6, 32, 32]}>
+        <meshBasicMaterial
+          color={baseColor}
+          transparent
+          opacity={0.15}
         />
       </Sphere>
     </Float>
@@ -39,41 +59,43 @@ function BrainCore() {
 
 function NeuralParticles() {
   const pointsRef = useRef<THREE.Points>(null);
-  const particleCount = 200;
+  const particleCount = 300;
 
   const positions = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
     for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 1.8 + Math.random() * 0.8;
+      const r = 1.7 + Math.random() * 1.0;
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i * 3 + 2] = r * Math.cos(phi);
+      sizes[i] = 0.5 + Math.random() * 1.5;
     }
     return pos;
   }, []);
 
   useFrame((state) => {
     if (pointsRef.current) {
-      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.05;
+      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.06;
+      pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.03) * 0.05;
     }
   });
 
   return (
     <points ref={pointsRef}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          args={[positions, 3]}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
         color="#14b8a6"
-        size={0.03}
+        size={0.025}
         transparent
-        opacity={0.6}
+        opacity={0.7}
         sizeAttenuation
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </points>
   );
@@ -82,7 +104,7 @@ function NeuralParticles() {
 function ConnectionLines() {
   const linesRef = useRef<THREE.LineSegments>(null);
   const selectedPatient = useNeuroStore((s) => s.selectedPatient);
-  const lineCount = 40;
+  const lineCount = 60;
 
   const { positions, colors } = useMemo(() => {
     const pos = new Float32Array(lineCount * 6);
@@ -124,21 +146,49 @@ function ConnectionLines() {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
-      <lineBasicMaterial vertexColors transparent opacity={0.4} />
+      <lineBasicMaterial vertexColors transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
     </lineSegments>
+  );
+}
+
+function BrainSurfaceDetail() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const selectedPatient = useNeuroStore((s) => s.selectedPatient);
+  const degradation = selectedPatient ? 1 - selectedPatient.mriScore / 100 : 0.3;
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.12;
+    }
+  });
+
+  return (
+    <Sphere ref={meshRef} args={[1.52, 48, 48]}>
+      <MeshDistortMaterial
+        color={degradation > 0.5 ? '#f97316' : degradation > 0.3 ? '#eab308' : '#0d9488'}
+        wireframe
+        transparent
+        opacity={0.12}
+        distort={0.2 + degradation * 0.2}
+        speed={1.2}
+      />
+    </Sphere>
   );
 }
 
 export default function Brain3D() {
   return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#14b8a6" />
-      <directionalLight position={[-5, -3, 2]} intensity={0.3} color="#f97316" />
-      <pointLight position={[0, 0, 3]} intensity={0.5} color="#14b8a6" />
+    <Canvas camera={{ position: [0, 0, 4.5], fov: 50 }} dpr={[1, 2]}>
+      <ambientLight intensity={0.15} />
+      <directionalLight position={[5, 5, 5]} intensity={0.6} color="#14b8a6" />
+      <directionalLight position={[-5, -3, 2]} intensity={0.2} color="#f97316" />
+      <pointLight position={[0, 0, 3]} intensity={0.4} color="#14b8a6" />
+      <pointLight position={[0, 2, -2]} intensity={0.2} color="#0d9488" />
       <BrainCore />
+      <BrainSurfaceDetail />
       <NeuralParticles />
       <ConnectionLines />
+      <Sparkles count={40} scale={4} size={1.5} speed={0.4} color="#14b8a6" opacity={0.3} />
     </Canvas>
   );
 }
