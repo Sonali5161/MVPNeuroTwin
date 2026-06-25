@@ -9,7 +9,8 @@ export type PanelId =
   | 'explainable-ai'
   | 'brain-network'
   | 'research-copilot'
-  | 'synthetic-patients';
+  | 'synthetic-patients'
+  | 'datasets';
 
 interface PatientData {
   id: string;
@@ -37,6 +38,8 @@ interface NeuroStore {
   patients: PatientData[];
   loadingState: Record<string, boolean>;
   setLoading: (key: string, v: boolean) => void;
+  datasetStatus: Record<string, 'connected' | 'syncing' | 'disconnected'>;
+  setDatasetStatus: (id: string, status: 'connected' | 'syncing' | 'disconnected') => void;
 }
 
 export const mockPatients: PatientData[] = [
@@ -128,4 +131,12 @@ export const useNeuroStore = create<NeuroStore>((set) => ({
   loadingState: {},
   setLoading: (key, v) =>
     set((s) => ({ loadingState: { ...s.loadingState, [key]: v } })),
+  datasetStatus: {
+    adni: 'connected',
+    oasis: 'connected',
+    ukbiobank: 'syncing',
+    nacc: 'disconnected',
+  },
+  setDatasetStatus: (id, status) =>
+    set((s) => ({ datasetStatus: { ...s.datasetStatus, [id]: status } })),
 }));

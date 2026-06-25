@@ -2,7 +2,7 @@
 
 import { useNeuroStore, type PanelId } from '@/lib/neuro-store';
 import {
-  Brain, Database, UserCircle, Clock, Pill, Eye, Network, Search, Sparkles, LayoutDashboard
+  Brain, Database, UserCircle, Clock, Pill, Eye, Network, Search, Sparkles, LayoutDashboard, HardDriveDownload
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ const navItems: { id: PanelId; icon: React.ElementType; label: string }[] = [
   { id: 'brain-network', icon: Network, label: 'Brain Network' },
   { id: 'research-copilot', icon: Search, label: 'Research Copilot' },
   { id: 'synthetic-patients', icon: Sparkles, label: 'Synthetic Patients' },
+  { id: 'datasets', icon: HardDriveDownload, label: 'Datasets' },
 ];
 
 export default function Sidebar() {

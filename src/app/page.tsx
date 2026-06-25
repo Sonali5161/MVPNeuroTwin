@@ -11,6 +11,7 @@ import ExplainableAIPanel from '@/components/neuro-twin/explainable-ai-panel';
 import BrainNetworkPanel from '@/components/neuro-twin/brain-network-panel';
 import ResearchCopilotPanel from '@/components/neuro-twin/research-copilot-panel';
 import SyntheticPatientsPanel from '@/components/neuro-twin/synthetic-patients-panel';
+import DatasetsPanel from '@/components/neuro-twin/datasets-panel';
 
 const panels: Record<PanelId, React.ComponentType> = {
   'overview': OverviewPanel,
@@ -22,6 +23,7 @@ const panels: Record<PanelId, React.ComponentType> = {
   'brain-network': BrainNetworkPanel,
   'research-copilot': ResearchCopilotPanel,
   'synthetic-patients': SyntheticPatientsPanel,
+  'datasets': DatasetsPanel,
 };
 
 export default function Home() {
