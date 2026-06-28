@@ -7,7 +7,7 @@ import { useAuthStore, PANEL_PERMISSIONS } from '@/lib/auth-store';
 import {
   Brain, Database, UserCircle, Clock, Pill, Eye, Network, Search, Sparkles,
   LayoutDashboard, HardDriveDownload, Shield, LogOut, ChevronDown,
-  FlaskConical, Stethoscope, Heart, Settings,
+  FlaskConical, Stethoscope, Heart, Settings, Server,
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
@@ -33,6 +33,7 @@ const navItems: { id: PanelId; icon: React.ElementType; label: string }[] = [
   { id: 'synthetic-patients', icon: Sparkles, label: 'Synthetic Patients' },
   { id: 'datasets', icon: HardDriveDownload, label: 'Datasets' },
   { id: 'audit-log', icon: Shield, label: 'Audit Log' },
+  { id: 'infrastructure', icon: Server, label: 'Infrastructure' },
 ];
 
 const roleBadgeConfig = {

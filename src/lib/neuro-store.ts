@@ -11,7 +11,8 @@ export type PanelId =
   | 'research-copilot'
   | 'synthetic-patients'
   | 'datasets'
-  | 'audit-log';
+  | 'audit-log'
+  | 'infrastructure';
 
 interface PatientData {
   id: string;

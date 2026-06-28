@@ -16,6 +16,7 @@ import ResearchCopilotPanel from '@/components/neuro-twin/research-copilot-panel
 import SyntheticPatientsPanel from '@/components/neuro-twin/synthetic-patients-panel';
 import DatasetsPanel from '@/components/neuro-twin/datasets-panel';
 import AuditLogPanel from '@/components/neuro-twin/audit-log-panel';
+import InfrastructurePanel from '@/components/neuro-twin/infrastructure-panel';
 import { Shield, Lock, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,7 @@ const panels: Record<PanelId, React.ComponentType> = {
   'synthetic-patients': SyntheticPatientsPanel,
   'datasets': DatasetsPanel,
   'audit-log': AuditLogPanel,
+  'infrastructure': InfrastructurePanel,
 };
 
 const roleLabels = {

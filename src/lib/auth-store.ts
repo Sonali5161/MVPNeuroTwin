@@ -102,6 +102,7 @@ export const PANEL_PERMISSIONS: Record<string, UserRole[]> = {
   'synthetic-patients': ['researcher'],
   'datasets': ['researcher'],
   'audit-log': ['researcher', 'clinician'],
+  'infrastructure': ['researcher'],
 };
 
 // RBAC Feature permissions
@@ -109,6 +110,7 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   'view-patient-data': ['researcher', 'clinician'],
   'edit-patient-data': ['clinician'],
   'run-ai-models': ['researcher', 'clinician'],
+  'view-infra-status': ['researcher'],
   'generate-synthetic-data': ['researcher'],
   'access-raw-datasets': ['researcher'],
   'drug-simulation': ['researcher', 'clinician'],
@@ -116,6 +118,9 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   'view-own-data': ['patient'],
   'export-data': ['researcher'],
   'audit-access': ['researcher', 'clinician'],
+  'view-infrastructure': ['researcher'],
+  'manage-ml-models': ['researcher'],
+  'manage-storage': ['researcher'],
 };
 
 function generateAuditId(): string {
