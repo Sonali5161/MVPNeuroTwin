@@ -10,7 +10,8 @@ export type PanelId =
   | 'brain-network'
   | 'research-copilot'
   | 'synthetic-patients'
-  | 'datasets';
+  | 'datasets'
+  | 'audit-log';
 
 interface PatientData {
   id: string;

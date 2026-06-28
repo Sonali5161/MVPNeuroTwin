@@ -1,6 +1,7 @@
 'use client';
 
 import { useNeuroStore } from '@/lib/neuro-store';
+import { useAuthStore } from '@/lib/auth-store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -24,6 +25,8 @@ const modalityCards = [
 
 export default function OverviewPanel() {
   const { selectedPatient, setActivePanel, patients, setSelectedPatient } = useNeuroStore();
+  const { user } = useAuthStore();
+  const isPatient = user?.role === 'patient';
   if (!selectedPatient) return null;
 
   const biomarkers = selectedPatient.bloodBiomarkers;
@@ -178,7 +181,8 @@ export default function OverviewPanel() {
         </div>
       </motion.div>
 
-      {/* Patient Switcher */}
+      {/* Patient Switcher — hidden for patient role */}
+      {!isPatient && (
       <motion.div variants={item}>
         <Card className="bg-card border-border">
           <CardHeader className="pb-3 pt-4 px-4">
@@ -214,6 +218,7 @@ export default function OverviewPanel() {
           </CardContent>
         </Card>
       </motion.div>
+      )}
     </motion.div>
   );
 }
