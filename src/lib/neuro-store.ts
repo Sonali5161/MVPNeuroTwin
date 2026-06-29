@@ -12,7 +12,9 @@ export type PanelId =
   | 'synthetic-patients'
   | 'datasets'
   | 'audit-log'
-  | 'infrastructure';
+  | 'infrastructure'
+  | 'patient-management'
+  | 'clinical-trials';
 
 interface PatientData {
   id: string;

@@ -103,11 +103,14 @@ export const PANEL_PERMISSIONS: Record<string, UserRole[]> = {
   'datasets': ['researcher'],
   'audit-log': ['researcher', 'clinician'],
   'infrastructure': ['researcher'],
+  'patient-management': ['researcher', 'clinician'],
+  'clinical-trials': ['researcher', 'clinician'],
 };
 
 // RBAC Feature permissions
 export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   'view-patient-data': ['researcher', 'clinician'],
+  'manage-patients': ['researcher', 'clinician'],
   'edit-patient-data': ['clinician'],
   'run-ai-models': ['researcher', 'clinician'],
   'view-infra-status': ['researcher'],
@@ -121,6 +124,12 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   'view-infrastructure': ['researcher'],
   'manage-ml-models': ['researcher'],
   'manage-storage': ['researcher'],
+  'patient-onboard': ['clinician'],
+  'patient-consent': ['clinician'],
+  'patient-comparison': ['researcher', 'clinician'],
+  'trial-enroll': ['clinician'],
+  'trial-ae-report': ['clinician'],
+  'trial-compliance': ['researcher', 'clinician'],
 };
 
 function generateAuditId(): string {
