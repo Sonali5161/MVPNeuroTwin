@@ -8,6 +8,7 @@ import {
   Brain, Database, UserCircle, Clock, Pill, Eye, Network, Search, Sparkles,
   LayoutDashboard, HardDriveDownload, Shield, LogOut, ChevronDown,
   FlaskConical, Stethoscope, Heart, Settings, Server, Users, ClipboardList,
+  Zap, Target, Award,
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
@@ -29,6 +30,9 @@ const navItems: { id: PanelId; icon: React.ElementType; label: string }[] = [
   { id: 'timeline', icon: Clock, label: 'Disease Timeline' },
   { id: 'drug-simulator', icon: Pill, label: 'Drug Simulator' },
   { id: 'clinical-trials', icon: ClipboardList, label: 'Clinical Trials' },
+  { id: 'ai-predictions', icon: Zap, label: 'AI Predictions' },
+  { id: 'model-explainability', icon: Target, label: 'Model XAI' },
+  { id: 'model-metrics', icon: Award, label: 'Model Metrics' },
   { id: 'explainable-ai', icon: Eye, label: 'Explainable AI' },
   { id: 'brain-network', icon: Network, label: 'Brain Network' },
   { id: 'research-copilot', icon: Search, label: 'Research Copilot' },

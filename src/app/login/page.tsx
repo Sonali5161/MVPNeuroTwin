@@ -48,6 +48,8 @@ export default function LoginPage() {
     email: '',
     password: '',
     organization: '',
+    age: '',
+    sex: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -69,6 +71,8 @@ export default function LoginPage() {
         role: selectedRole,
         organization: formData.organization,
         hipaaConsent: true,
+        age: formData.age ? parseInt(formData.age) : undefined,
+        sex: formData.sex || undefined,
       });
     }
 
@@ -283,6 +287,41 @@ export default function LoginPage() {
                     />
                   </div>
                 </div>
+
+                {/* Age and Gender - only for patients */}
+                {selectedRole === 'patient' && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="age" className="text-sm text-foreground">Age</Label>
+                      <Input
+                        id="age"
+                        type="number"
+                        placeholder="28"
+                        min="1"
+                        max="120"
+                        value={formData.age}
+                        onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                        className="bg-card border-border h-11"
+                        required={selectedRole === 'patient'}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="sex" className="text-sm text-foreground">Gender</Label>
+                      <select
+                        id="sex"
+                        value={formData.sex}
+                        onChange={(e) => setFormData({ ...formData, sex: e.target.value })}
+                        className="w-full h-11 px-3 rounded-md bg-card border border-border text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-neuro/50"
+                        required={selectedRole === 'patient'}
+                      >
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
 
                 {/* Role Selection */}
                 <div className="space-y-2">

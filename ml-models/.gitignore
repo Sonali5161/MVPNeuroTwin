@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Trained models (large files)
+trained/*.pth
+trained/*.pkl
+trained/*.h5
+trained/*.onnx
+
+# Keep metrics
+!trained/*.json
+
+# Data
+data/*.csv
+data/*.parquet
+data/*.hdf5
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

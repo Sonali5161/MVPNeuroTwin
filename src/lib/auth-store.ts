@@ -50,6 +50,8 @@ export interface RegisterData {
   role: UserRole;
   organization: string;
   hipaaConsent: boolean;
+  age?: number;
+  sex?: string;
 }
 
 // Mock user database
@@ -105,6 +107,9 @@ export const PANEL_PERMISSIONS: Record<string, UserRole[]> = {
   'infrastructure': ['researcher'],
   'patient-management': ['researcher', 'clinician'],
   'clinical-trials': ['researcher', 'clinician'],
+  'ai-predictions': ['researcher', 'clinician'],
+  'model-explainability': ['researcher'],
+  'model-metrics': ['researcher'],
 };
 
 // RBAC Feature permissions
@@ -147,98 +152,78 @@ export const useAuthStore = create<AuthStore>()(
 
       login: async (email: string, password: string): Promise<boolean> => {
         set({ isLoading: true, error: null });
-        // Simulate API delay
-        await new Promise((r) => setTimeout(r, 1200));
+        
+        try {
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
 
-        const found = mockUsers.find(
-          (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-        );
+          const result = await response.json();
 
-        if (!found) {
-          set({ isLoading: false, error: 'Invalid email or password. Please try again.' });
+          if (!response.ok) {
+            set({ isLoading: false, error: result.error || 'Login failed' });
+            return false;
+          }
+
+          const user: User = {
+            ...result.user,
+            lastLogin: new Date().toISOString(),
+          };
+
+          set({
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+          });
+          return true;
+        } catch (error) {
+          set({ 
+            isLoading: false, 
+            error: 'Network error. Please check your connection.' 
+          });
           return false;
         }
-
-        const { password: _, ...userData } = found;
-        const user: User = {
-          ...userData,
-          lastLogin: new Date().toISOString(),
-        };
-
-        const auditEntry: Omit<AuditLogEntry, 'id' | 'timestamp'> = {
-          userId: user.id,
-          userName: user.name,
-          userRole: user.role,
-          action: 'LOGIN',
-          resource: 'Authentication',
-          ip: '192.168.1.100',
-          status: 'success',
-          details: `Successful login for ${user.role} role`,
-        };
-
-        set({
-          user,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null,
-          auditLogs: [
-            {
-              ...auditEntry,
-              id: generateAuditId(),
-              timestamp: new Date().toISOString(),
-            },
-          ],
-        });
-        return true;
       },
 
       register: async (data: RegisterData): Promise<boolean> => {
         set({ isLoading: true, error: null });
-        await new Promise((r) => setTimeout(r, 1500));
+        
+        try {
+          const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
 
-        if (mockUsers.find((u) => u.email.toLowerCase() === data.email.toLowerCase())) {
-          set({ isLoading: false, error: 'An account with this email already exists.' });
+          const result = await response.json();
+
+          if (!response.ok) {
+            set({ isLoading: false, error: result.error || 'Registration failed' });
+            return false;
+          }
+
+          const user: User = {
+            ...result.user,
+            lastLogin: new Date().toISOString(),
+          };
+
+          set({
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+          });
+          return true;
+        } catch (error) {
+          set({ 
+            isLoading: false, 
+            error: 'Network error. Please check your connection.' 
+          });
           return false;
         }
-
-        const newUser: User = {
-          id: `USR-${String(mockUsers.length + 1).padStart(3, '0')}`,
-          email: data.email,
-          name: data.name,
-          role: data.role,
-          organization: data.organization,
-          hipaaConsent: data.hipaaConsent,
-          lastLogin: new Date().toISOString(),
-          twoFactorEnabled: false,
-        };
-
-        mockUsers.push({ ...newUser, password: data.password });
-
-        const auditEntry: Omit<AuditLogEntry, 'id' | 'timestamp'> = {
-          userId: newUser.id,
-          userName: newUser.name,
-          userRole: newUser.role,
-          action: 'REGISTER',
-          resource: 'Account Creation',
-          ip: '192.168.1.100',
-          status: 'success',
-          details: `New ${newUser.role} account created at ${newUser.organization}`,
-        };
-
-        set({
-          user: newUser,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null,
-          auditLogs: [
-            {
-              ...auditEntry,
-              id: generateAuditId(),
-              timestamp: new Date().toISOString(),
-            },
-          ],
-        });
-        return true;
       },
 
       logout: () => {

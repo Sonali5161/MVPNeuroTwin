@@ -14,7 +14,10 @@ export type PanelId =
   | 'audit-log'
   | 'infrastructure'
   | 'patient-management'
-  | 'clinical-trials';
+  | 'clinical-trials'
+  | 'ai-predictions'
+  | 'model-explainability'
+  | 'model-metrics';
 
 interface PatientData {
   id: string;
@@ -127,11 +130,11 @@ export const mockPatients: PatientData[] = [
 export const useNeuroStore = create<NeuroStore>((set) => ({
   activePanel: 'overview',
   setActivePanel: (panel) => set({ activePanel: panel }),
-  selectedPatient: mockPatients[0],
+  selectedPatient: null, // Will be loaded from user's profile
   setSelectedPatient: (patient) => set({ selectedPatient: patient }),
   isSimulating: false,
   setIsSimulating: (v) => set({ isSimulating: v }),
-  patients: mockPatients,
+  patients: mockPatients, // For demo/clinician view
   loadingState: {},
   setLoading: (key, v) =>
     set((s) => ({ loadingState: { ...s.loadingState, [key]: v } })),

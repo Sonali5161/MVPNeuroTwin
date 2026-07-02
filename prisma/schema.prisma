@@ -13,14 +13,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User model for authentication
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String      @id @default(cuid())
+  email             String      @unique
+  name              String
+  password          String
+  role              String      // researcher, clinician, patient
+  organization      String
+  avatar            String?
+  hipaaConsent      Boolean     @default(false)
+  twoFactorEnabled  Boolean     @default(false)
+  lastLogin         DateTime    @default(now())
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  auditLogs         AuditLog[]
+  patients          Patient[]   // For clinicians/researchers
 }
 
+// Patient data model
+model Patient {
+  id                  String   @id @default(cuid())
+  patientId           String   @unique  // PT-XXX format
+  name                String
+  age                 Int
+  sex                 String
+  mriScore            Float
+  geneticRisk         Float
+  amyloidBeta         Float
+  tau                 Float
+  nfL                 Float
+  cognitiveScore      Int
+  brainAge            Int
+  sleepQuality        Float
+  activityLevel       Float
+  speechScore         Float
+  clinicalNotes       String?
+  createdById         String
+  createdBy           User     @relation(fields: [createdById], references: [id])
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+// Audit log model
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  userName    String
+  userRole    String
+  action      String
+  resource    String
+  patientId   String?
+  ip          String
+  status      String   // success, denied, warning
+  details     String?
+  timestamp   DateTime @default(now())
+}
+
+// Legacy Post model (can be removed if not needed)
 model Post {
   id        String   @id @default(cuid())
   title     String

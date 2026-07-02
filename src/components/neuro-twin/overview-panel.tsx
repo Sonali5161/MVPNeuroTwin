@@ -27,7 +27,19 @@ export default function OverviewPanel() {
   const { selectedPatient, setActivePanel, patients, setSelectedPatient } = useNeuroStore();
   const { user } = useAuthStore();
   const isPatient = user?.role === 'patient';
-  if (!selectedPatient) return null;
+  
+  if (!selectedPatient) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-neuro/20 flex items-center justify-center glow-neuro animate-pulse mx-auto">
+            <Brain className="w-6 h-6 text-neuro" />
+          </div>
+          <p className="text-sm text-muted-foreground">Loading patient data...</p>
+        </div>
+      </div>
+    );
+  }
 
   const biomarkers = selectedPatient.bloodBiomarkers;
 

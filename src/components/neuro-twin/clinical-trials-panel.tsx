@@ -736,8 +736,6 @@ export default function ClinicalTrialsPanel() {
       { label: 'Ongoing', value: adverseEventsStats.ongoing, icon: Clock, color: 'text-amber-400' },
     ];
 
-    const aeFilters = ['all', 'serious', 'non-serious', 'mild', 'moderate', 'severe'];
-
     return (
       <motion.div variants={container} initial="hidden" animate="show" className="space-y-4">
         {/* Stats row */}

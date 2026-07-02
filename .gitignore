@@ -52,3 +52,18 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Documentation files (excluding README.md)
+*.md
+!README.md
+
+# Database
+/db/
+*.db
+*.db-journal
+
+# Scripts (optional - keep or remove based on need)
+/scripts/check-database.js
+/scripts/view-database.js
+/scripts/reset-database.js
+/scripts/prepare-deployment.js
