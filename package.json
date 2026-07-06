@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "eslint .",
     "db:push": "prisma db push",
@@ -13,7 +13,8 @@
     "db:reset": "prisma migrate reset",
     "db:view": "node scripts/view-database.js",
     "db:check": "node scripts/check-database.js",
-    "prepare-deploy": "node scripts/prepare-deployment.js"
+    "prepare-deploy": "node scripts/prepare-deployment.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
